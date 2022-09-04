@@ -40,4 +40,13 @@ Beaware that white spaces and newlines DO count as mistake (the college also cou
 If there isn't any problems you will get a message accordingly.
 
 ## Taring your files ##
-sss
+
+Taring requires you to have 4 different files in order to make it successfully, example:
+* `ex1a.cc`
+* `ex1b.cc`
+* `ex1c.cc`
+* `README`
+After selecting the tar option and worrying that you have all of these 4 files in the same directory, you will get .tgz file that you have to submit.
+
+
+Good Luck with your homeworks.
