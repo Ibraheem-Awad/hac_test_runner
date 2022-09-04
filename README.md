@@ -35,6 +35,7 @@ If you have all of your .out files in the same directory, and you have made the 
 All you got to do is just run the program and select the second option, which is making diff.
 Then the program will tell you if there is any problems in your sol compared to teacher's sol, example:
  * `Problem in ex1a_test00.in`
+
 Beaware that white spaces and newlines DO count as mistake (the college also counts that as a mistake)
 If there isn't any problems you will get a message accordingly.
 
