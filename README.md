@@ -24,7 +24,8 @@ After selecting the first option, you will have 3 options:
 Teacher Sol must end with sol in the end of its name, example: ex1asol
 Your Sol must be the same name but without sol uin the end of it, example: ex1a
 And finally .in files must have a valid name, example:
-ex1a_test00.in
+   * `ex1asol`
+
 
 After you select which sol you want to make tests for, you will get .out files.
 
