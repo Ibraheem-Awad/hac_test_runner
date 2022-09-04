@@ -1,4 +1,4 @@
-# hac_test_runner
+# HAC Tester
 A program that was written in python to help the students in my college in their homework
 
 With this program you can:
@@ -24,8 +24,19 @@ After selecting the first option, you will have 3 options:
 Teacher Sol must end with sol in the end of its name, example: ex1asol
 Your Sol must be the same name but without sol uin the end of it, example: ex1a
 And finally .in files must have a valid name, example:
-   * `ex1asol`
+  * `ex1a_test00.in`
 
 
 After you select which sol you want to make tests for, you will get .out files.
 
+## Diff between tests ##
+
+If you have all of your .out files in the same directory, and you have made the tests using this program, then its easy to do diffs.
+All you got to do is just run the program and select the second option, which is making diff.
+Then the program will tell you if there is any problems in your sol compared to teacher's sol, example:
+ * `Problem in ex1a_test00.in`
+Beaware that white spaces and newlines DO count as mistake (the college also counts that as a mistake)
+If there isn't any problems you will get a message accordingly.
+
+## Taring your files ##
+sss
