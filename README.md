@@ -23,32 +23,32 @@ After selecting the first option, you will have 3 options:
 
 Teacher Sol must end with sol in the end of its name, example: ex1asol
 Your Sol must be the same name but without sol uin the end of it, example: ex1a
-And finally .in files must have a valid name, example:
+And finally ".in" files must have a valid name, example:
   * `ex1a_test00.in`
 
 
-After you select which sol you want to make tests for, you will get .out files.
+After you select which sol you want to make tests for, you will get ".out" files.
 
 ## Diff between tests ##
 
-If you have all of your .out files in the same directory, and you have made the tests using this program, then its easy to do diffs.
+If you have all of your ".out" files in the same directory, and you have made the tests using this program, then its easy to do diffs.
 All you got to do is just run the program and select the second option, which is making diff.
-Then the program will tell you if there is any problems in your sol compared to teacher's sol, example:
+Then the program will tell you if there are any problems in your sol compared to teacher's sol, example:
  * `Problem in ex1a_test00.in`
 
 Beaware that white spaces and newlines DO count as mistake (the college also counts that as a mistake)
-If there isn't any problems you will get a message accordingly.
+If there aren't any problems you will get a message accordingly.
 
 ## Taring your files ##
 
-Taring requires you to have 4 different files in order to make it successfully, example:
+Compressing requires you to have 4 different files in order to compress them successfully, example:
 * `ex1a.cc`
 * `ex1b.cc`
 * `ex1c.cc`
 * `README`
 
 
-After selecting the tar option and worrying that you have all of these 4 files in the same directory, you will get .tgz file that you have to submit.
+After selecting the tar option and checking that you have all of these 4 files in the same directory, you will get a ".tgz" file that you have to submit.
 
 
-Good Luck with your homeworks.
+Good Luck with your homework!
