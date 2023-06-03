@@ -6,7 +6,7 @@ import subprocess as sp
 class bcolors:
     HEADER = '\033[95m'
     OKCYAN = '\033[96m'
-    OKGREEN = '\033[91m'
+    OKGREEN = '\033[92m'
     WARNING = '\033[93m'
     FAIL = '\033[91m'
     ENDC = '\033[0m'
@@ -117,26 +117,22 @@ def option(answer):
 
 
 def option_tests(answer, all_tests, targil_num, prog_num):
-    if answer == '1':
-        school_test(all_tests, targil_num, prog_num)
-        print("\n")
-        return
-    elif answer == '2':
-        my_test(all_tests, targil_num, prog_num)
-        print("\n")
-        return
-    elif answer == '0':
-        print("\n")
-        return
-    elif answer == '3':
-        school_test(all_tests, targil_num, prog_num)
-        my_test(all_tests, targil_num, prog_num)
-        print("\n")
-        return
+    options = {
+        '1': school_test,
+        '2': my_test,
+        '0': lambda: None,
+        '3': lambda: (school_test(all_tests, targil_num, prog_num), my_test(all_tests, targil_num, prog_num)),
+    }
+
+    func = options.get(answer, None)
+    if func:
+        func()
     else:
         print("Wrong Choice")
         answer = input()
-        return option_tests(answer, all_tests, targil_num, prog_num)
+        option_tests(answer, all_tests, targil_num, prog_num)
+
+    print("\n")
 
 
 def school_test(all_tests, targil_num, prog_num):
