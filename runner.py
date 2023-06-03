@@ -1,6 +1,9 @@
 import os
 import glob
+import re
+from datetime import date
 import subprocess as sp
+import subprocess
 
 
 class bcolors:
@@ -12,6 +15,40 @@ class bcolors:
     ENDC = '\033[0m'
     CYELLOW = '\033[33m'
 
+ex_num = ""
+a_b_c = ""
+directory = ""
+
+def get_global_varibles():
+    global ex_num
+    global a_b_c
+
+    for file in glob.glob("*.in"):
+        name = convert(file)  # convert it to string
+        break
+
+    ex_num,a_b_c = get_info(name)
+
+
+def find_executable_path(directory):
+    for file in os.listdir(directory):
+        file_path = os.path.join(directory, file)
+        if os.path.isfile(file_path) and os.access(file_path, os.X_OK):
+            return file_path
+    return None
+
+def get_info(str):
+    pattern_for_num = r'ex(\d+)[abc]'
+    pattern_for_letter = r'ex(\d+)([abc])'
+    match1 = re.search(pattern_for_num, str)
+    match2 = re.search(pattern_for_letter, str)
+    if match1 and match2:
+        number = match1.group(1)
+        letter = match2.group(2)
+        return number, letter
+    else:
+        return None
+
 
 def get_tests_info():
     all_tests = []  # string array for tests
@@ -22,10 +59,9 @@ def get_tests_info():
         all_tests.append(name)  # add to string
         test_counter += 1
 
-    if test_counter <= 1:
+    if test_counter <= 0:
         print(bcolors.FAIL + "Not enough .in files\n" + bcolors.ENDC)
         return all_tests, test_counter
-
     else:
         all_tests.sort()
 
@@ -33,16 +69,7 @@ def get_tests_info():
 
 
 def convert(char):
-
-    # initialization of string to ""
-    new = ""
-
-    # traverse in the string
-    for ch in char:
-        new += ch
-
-    # return string
-    return new
+    return char
 
 
 def menu_msg():
@@ -50,8 +77,8 @@ def menu_msg():
         "What would you like to do ?\n" +
         "1) Make tests\n" +
         "2) Diff in tests\n" +
-        "3) Tar you files \n" +
-        "4) About \n" +
+        "3) Tar your files\n" +
+        "4) About\n" +
         "0) Exit\n"
     )
     return answer
@@ -60,9 +87,10 @@ def menu_msg():
 def test_msg():
     answer = input(
         "Would you like to make tests for (0 to return to menu):\n" +
-        "1) School Tests \n" +
+        "1) School Tests\n" +
         "2) Your Tests\n" +
-        "3) Both\n"
+        "3) Both\n" +
+        "0) Return to main menu\n"
     )
     return answer
 
@@ -78,125 +106,149 @@ def make_tests():
         print(bcolors.OKCYAN + "\nFound " +
               str(test_counter) + " test files" + bcolors.ENDC)
         answer = test_msg()
-        option_tests(answer, all_tests, ex_num, prog_num)
+        option_tests(answer, all_tests) #
     else:
         return
+    
+    return ex_num,prog_num
 
 
 def option(answer):
+    global ex_num
+    global a_b_c
 
     if answer == '0':
         print(bcolors.CYELLOW +
               "Thank you for using my program\nGood Luck..." + bcolors.ENDC)
         return
-
     elif answer == '1':
         make_tests()
         answer = menu_msg()
         option(answer)
-
     elif answer == '2':
         make_diff()
         answer = menu_msg()
         option(answer)
-
     elif answer == '3':
         make_tar()
         answer = menu_msg()
         option(answer)
-
     elif answer == '4':
-        print(bcolors.HEADER + "Programmed by Ibraheem ,using Python\n" + bcolors.ENDC)
+        print(bcolors.HEADER + "Programmed by Ibraheem, using Python\n" + bcolors.ENDC)
         answer = menu_msg()
         option(answer)
-
     else:
         print("Wrong Choice")
         answer = input()
-        return option(answer)
+        option(answer)
 
 
-def option_tests(answer, all_tests, targil_num, prog_num):
-    options = {
-        '1': school_test,
-        '2': my_test,
-        '0': lambda: None,
-        '3': lambda: (school_test(all_tests, targil_num, prog_num), my_test(all_tests, targil_num, prog_num)),
-    }
-
-    func = options.get(answer, None)
-    if func:
-        func()
+def option_tests(answer, all_tests):
+    if answer == '1':
+        school_test(all_tests)
+    elif answer == '2':
+        my_test(all_tests)
+    elif answer == '0':
+        return
+    elif answer == '3':
+        school_test(all_tests)
+        my_test(all_tests)
     else:
         print("Wrong Choice")
         answer = input()
-        option_tests(answer, all_tests, targil_num, prog_num)
-
-    print("\n")
+        option_tests(answer, all_tests)
 
 
-def school_test(all_tests, targil_num, prog_num):
+def school_test(all_tests):
+    global ex_num
+    global a_b_c
+
     out_test, in_test = 0, 0
     exist = False
-    if os.path.isfile("ex" + targil_num + prog_num + "sol"):
+    if os.path.isfile("ex" + ex_num + a_b_c + "sol"):
         exist = True
     else:
-        print(bcolors.FAIL + "School SOL doesn't exist" + bcolors.ENDC)
+        print(bcolors.FAIL + "School SOL doesn't exist\n" + bcolors.ENDC)
         return
 
     if exist is True:
         while in_test < len(all_tests):
-            run_command = './ex' + targil_num + prog_num + 'sol < ' + \
+            run_command = './ex' + ex_num + a_b_c + 'sol < ' + \
                 all_tests[in_test] + ' > test' + str(out_test) + '.out'
             out_test += 1
             in_test += 1
             os.system(run_command)  # execute command line
 
         print(bcolors.OKGREEN + str(out_test) +
-              " Out files were made using school executable" + bcolors.ENDC)
+              " Out files were made using school executable\n" + bcolors.ENDC)
 
 
-def my_test(all_tests, targil_num, prog_num):
+def my_test(all_tests):
+    global ex_num
+    global a_b_c
+
     out_test, in_test = 0, 0
     exist = False
-    if os.path.isfile("ex" + targil_num + prog_num):
+    if os.path.isfile("ex" + ex_num + a_b_c):
         exist = True
     else:
-        print(bcolors.FAIL + "Your SOL doesn't exist" + bcolors.ENDC)
+        print(bcolors.FAIL + "Your SOL doesn't exist\n" + bcolors.ENDC)
         return
 
     if exist is True:
         while in_test < len(all_tests):
-            run_command = './ex' + targil_num + prog_num + ' < ' + \
+            run_command = './ex' + ex_num + a_b_c + ' < ' + \
                 all_tests[in_test] + ' > test' + str(out_test) + '_me.out'
             os.popen(run_command)
             output = sp.getoutput(run_command)
-            
+
             if output != "":
                 print(bcolors.WARNING + "Problem in " +
                       all_tests[in_test] + bcolors.ENDC)
-            
+
             out_test += 1
             in_test += 1
             output = ""
 
+        check_memory()
         print(bcolors.OKGREEN + str(out_test) +
-              " Out files were made using your executable" + bcolors.ENDC)
+              " Out files were made using your executable\n" + bcolors.ENDC)
+
+
+def check_memory():
+    executable = find_executable_path(path)
+    check_memory_leaks(executable)
+
+
+def check_memory_leaks(executable):
+    result = subprocess.run(["valgrind", "--leak-check=summary", executable], 
+                            stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+    print(result.stdout.decode())
+    print(result.stderr.decode())
+
+    # process = subprocess.Popen(["valgrind", "--leak-check=summary", executable], stderr=subprocess.PIPE)
+    # process.wait()
+    # valgrind_output = process.stderr.read().decode()
+    # print(valgrind_output)
 
 
 def make_diff():
+    global ex_num
+    global a_b_c
+
     out_test = []
     ind_school, ind_me, file_count, done = 0, 1, 0, 0
     sub_string = "--"
     problem = False
+    
+    if not (os.path.isfile("ex" + a_b_c + ex_num + "sol") and os.path.isfile("ex" + a_b_c + ex_num)):
+        print(bcolors.FAIL + "Both sols should exist\n" + bcolors.ENDC)
+        return
+
     for out_file in glob.glob("*.out"):
         name = convert(out_file)  # convert it to string
         out_test.append(name)
         file_count += 1
-
-    if file_count < 2:
-        print(bcolors.FAIL + "Not enough .out files\n" + bcolors.ENDC)
-        return
 
     else:
         file_count /= 2
@@ -255,9 +307,9 @@ def make_tar():
         return
     if isValid is True:
         get_ex = files[1]
-        targil_num = get_ex[2]
-        run_command = 'tar czvf ex' + targil_num + '.tgz ex'+targil_num + \
-            'a.cc ex'+targil_num+'b.cc ex'+targil_num+'c.cc README'
+        a_b_c = get_ex[2]
+        run_command = 'tar czvf ex' + a_b_c + '.tgz ex' + a_b_c + \
+            'a.cc ex' + a_b_c + 'b.cc ex' + a_b_c + 'c.cc README'
         os.system(run_command)
         print(bcolors.OKGREEN + "Tar was successfully made\n" + bcolors.ENDC)
 
@@ -287,23 +339,29 @@ def check_for_80(files):
 
 def check_for_name(files):
     to_ret = True
-    get_ex = files[1]
-    targil_num = get_ex[2]
 
     if files[0] != "README":
         to_ret = False
 
-    if files[1] != "ex" + targil_num + "a.cc":
+    if files[1] != "ex" + a_b_c + "a.cc":
         to_ret = False
 
-    if files[2] != "ex" + targil_num + "b.cc":
+    if files[2] != "ex" + a_b_c + "b.cc":
         to_ret = False
 
-    if files[3] != "ex" + targil_num + "c.cc":
+    if files[3] != "ex" + a_b_c + "c.cc":
         to_ret = False
 
     return to_ret
 
+
+def days_valdtion():
+    today = date.today()
+    target_date = date(2023, 7, 31)
+    remaining_days = (target_date - today).days
+    if(remaining_days > 0):
+        print(f"You have {remaining_days} days for your license")
+    return remaining_days
 
 # ----------------------------------------------------------------------------
 check_for_user_command = 'whoami'
@@ -314,8 +372,13 @@ if username == "ibraheem":
     run_command = 'pwd'
     os.popen(run_command)
     path = sp.getoutput(run_command)
-    answer = menu_msg()
-    option(answer)
+    time = days_valdtion()
+    if time > 0:
+        get_global_varibles()
+        answer = menu_msg()
+        option(answer)
+    else:
+        print(f"Your license has expired\nPlease contact the developer\n")
 else:
     print(bcolors.FAIL + "You are not allowed to use the program\n" + bcolors.ENDC +
           "Please contact the developer.")
